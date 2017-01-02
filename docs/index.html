@@ -1,0 +1,959 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mjølfjell vandrarheim</title>
+    <link rel="stylesheet" href="lib/normalize.css">
+    <link rel="stylesheet" href="lib/pikaday.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
+    <link href="//cdn.muicss.com/mui-0.9.7/css/mui.min.css" rel="stylesheet" type="text/css" />
+    <script src="//cdn.muicss.com/mui-0.9.7/js/mui.min.js"></script>
+    <style>
+        *, *:before, *:after {
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            background: #c6d1d8;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .first {
+            display: block;
+            height: auto;
+            width: 100%;
+            /*
+min-height: 500px;
+
+background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
+*/
+            overflow: hidden;
+        }
+        .first .description {
+            width: 400px;
+            height: 100%;
+            background: black;
+            color:white;
+            float:left;
+            padding: 0 30px 100px;
+        }
+        .first .description header {
+            margin-bottom: 40px;
+        }
+        .first .mainImage{
+            height: 100%;
+            width: auto;
+            overflow: hidden;
+            background: url('bg.jpeg') 0 0 no-repeat;
+            background-size: cover;
+            padding-bottom: 1000px;
+            margin-bottom: -1000px;
+        }
+
+        header {
+            height: 50px;
+            width: 100%;
+            background: black;
+            display: block;
+            color: white;
+            font-size: 18px;
+            line-height: 50px;
+        }
+
+        .inner {
+            position: relative;
+            width: 100%;
+            max-width: 1024px;
+            margin: 0 auto;
+        }
+
+        header .inner {
+        padding-left: 67.5px;
+        height:50px;
+        }
+
+        header .logo {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            /*
+            background: url('img/icon-hostelling-international-logo.png') 0 0 no-repeat;
+            */
+            background: url('logo.png') 0 0 no-repeat;
+            background-size: contain;
+
+            /*
+            width: 105px;
+            height: 104px;
+            */
+            width: 52.5px;
+            height: 52px;
+        }
+
+        header .home {
+            text-decoration: none;
+            color: inherit;
+            font-weight: 300;
+        }
+
+        .dates {
+            width: 100%;
+            height: 140px;
+            background: #a35b19;
+            color: white;
+            font-size: 36px;
+            text-align: center;
+            padding-top: 40px;
+        }
+
+        .dates .inner {
+            width: auto;
+            max-width: none;
+            display: inline-block;
+        }
+
+        .dates input {
+            outline: none;
+            background-color: transparent;
+            border: 0;
+            color: inherit;
+            font-size: inherit;
+            text-align: left;
+            width: 300px;
+        }
+
+        .dates label {
+            opacity: .8;
+            font-size: 14px;
+            display: block;
+            text-align: left;
+            font-weight: 300;
+        }
+
+        .dates label svg {
+            vertical-align: bottom;
+        }
+
+        .dates .date {
+            display: inline-block;
+        }
+
+        main {
+            padding: 20px 0;
+        }
+
+        .rooms, .extras {
+            overflow: hidden;
+            padding-bottom: 30px;
+        }
+
+        .extras h2 {
+            margin: 0;
+        }
+
+        .rooms .room, .extras .extra {
+            float: left;
+            position: relative;
+            width: 300px;
+            height: 202px;
+            display: block;
+            margin: 10px 10px 25px;
+        }
+
+        .rooms .room figcaption {
+            position: absolute;
+            top: 100%;
+            left: 5px;
+            padding-top: 5px;
+        }
+
+        .rooms .room input[type=radio], .extras .extra input[type=checkbox] {
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+
+        .extras .extra input[type=checkbox]:checked + label:after {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            content: '';
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 150px 0 0 150px;
+            border-color: transparent transparent transparent #007bff;
+            pointer-events: none;
+        }
+
+        .rooms .room label, .extras .extra label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: transparent;
+            border-radius: 10px;
+            width: 100%;
+            height: 100%;
+        }
+
+        .rooms .room img, .extras .extra img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .rooms .room h3, .extras .extra h3 {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: white;
+            opacity: .4;
+            padding: 6px;
+            margin: 0;
+            border-radius: 6px;
+        }
+
+        footer {
+            width: 100%;
+            height: 200px;
+            background: black;
+            color: white;
+            padding-top: 50px;
+        }
+
+        footer a,footer a:visited {
+            color: white;
+        }
+
+        footer address {
+            font-style: normal;
+        }
+
+        .popup {
+            position: absolute;
+            background: blue;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .popup .person {
+            display: inline-block;
+            position: relative;
+        }
+        .popup section button {
+            background: transparent;
+            box-shadow: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            color: white;
+            border: 1px solid white;
+            border-radius: 3px;
+            outline:none;
+        }
+        .popup.ROOM section button {
+            vertical-align: 9px;
+        }
+        .popup .person > input[type=radio] + label {
+            color: red;
+            fill: red;
+            padding-left: 10px;
+        }
+        .popup .person > input[type=radio]:checked + label {
+            color: green;
+            fill: green;
+        }
+        .popup .person > input[type=radio] {
+            position: absolute;
+            top:0;
+            left:0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .price {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #007bff;
+            padding: 10px 10px 10px 20px;
+            border-bottom-left-radius: 15px;
+        }
+        .occupants {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 150px;
+            width: 150px;
+            pointer-events: none;
+        }
+        .occupants:before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            content: '';
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 150px 0 0 150px;
+            border-color: transparent transparent transparent #007bff;
+            pointer-events: none;
+        }
+        .occupantsContent {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            padding: 10px;
+            pointer-events: none;
+            font-size: 28px;
+        }
+        .occupantsContent svg {
+            margin-left: 2px;
+        }
+        .orderSummary {
+            position: fixed;
+            bottom:0;
+            left:0;
+            width:100%;
+            background: green;
+            font-size: 16px;
+        }
+        .orderSummary .order {
+            overflow: hidden;
+        }
+        .orderSummary button {
+            float: right;
+        }
+        .orderSummary table {
+            float: right;
+        }
+        .orderSummary h2 {
+            margin:0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .orderSummary form {
+            margin: 2em 0;
+            width: 480px;
+        }
+    </style>
+    <style type='text/css'>
+        @-webkit-keyframes uil-default-anim {
+           0% {
+               opacity: 1
+           }
+           100% {
+               opacity: 0
+           }
+       }
+
+    @keyframes uil-default-anim {
+        0% {
+            opacity: 1
+        }
+        100% {
+            opacity: 0
+        }
+    }
+
+    .uil-default-css > div:nth-of-type(1) {
+        -webkit-animation: uil-default-anim 1s linear infinite;
+        animation: uil-default-anim 1s linear infinite;
+        -webkit-animation-delay: -0.5s;
+        animation-delay: -0.5s;
+    }
+
+    .uil-default-css {
+        position: relative;
+        background: none;
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+    }
+
+    .uil-default-css > div:nth-of-type(2) {
+        -webkit-animation: uil-default-anim 1s linear infinite;
+        animation: uil-default-anim 1s linear infinite;
+        -webkit-animation-delay: -0.4166666666666667s;
+        animation-delay: -0.4166666666666667s;
+    }
+
+    .uil-default-css > div:nth-of-type(3) {
+        -webkit-animation: uil-default-anim 1s linear infinite;
+        animation: uil-default-anim 1s linear infinite;
+        -webkit-animation-delay: -0.33333333333333337s;
+        animation-delay: -0.33333333333333337s;
+    }
+
+    .uil-default-css > div:nth-of-type(4) {
+        -webkit-animation: uil-default-anim 1s linear infinite;
+        animation: uil-default-anim 1s linear infinite;
+        -webkit-animation-delay: -0.25s;
+        animation-delay: -0.25s;
+    }
+
+    .uil-default-css > div:nth-of-type(5) {
+        -webkit-animation: uil-default-anim 1s linear infinite;
+        animation: uil-default-anim 1s linear infinite;
+        -webkit-animation-delay: -0.16666666666666669s;
+        animation-delay: -0.16666666666666669s;
+    }
+
+    .uil-default-css > div:nth-of-type(6) {
+        -webkit-animation: uil-default-anim 1s linear infinite;
+        animation: uil-default-anim 1s linear infinite;
+        -webkit-animation-delay: -0.08333333333333331s;
+        animation-delay: -0.08333333333333331s;
+    }
+
+    .uil-default-css > div:nth-of-type(7) {
+        -webkit-animation: uil-default-anim 1s linear infinite;
+        animation: uil-default-anim 1s linear infinite;
+        -webkit-animation-delay: 0s;
+        animation-delay: 0s;
+    }
+
+    .uil-default-css > div:nth-of-type(8) {
+        -webkit-animation: uil-default-anim 1s linear infinite;
+        animation: uil-default-anim 1s linear infinite;
+        -webkit-animation-delay: 0.08333333333333337s;
+        animation-delay: 0.08333333333333337s;
+    }
+
+    .uil-default-css > div:nth-of-type(9) {
+        -webkit-animation: uil-default-anim 1s linear infinite;
+        animation: uil-default-anim 1s linear infinite;
+        -webkit-animation-delay: 0.16666666666666663s;
+        animation-delay: 0.16666666666666663s;
+    }
+
+    .uil-default-css > div:nth-of-type(10) {
+        -webkit-animation: uil-default-anim 1s linear infinite;
+        animation: uil-default-anim 1s linear infinite;
+        -webkit-animation-delay: 0.25s;
+        animation-delay: 0.25s;
+    }
+
+    .uil-default-css > div:nth-of-type(11) {
+        -webkit-animation: uil-default-anim 1s linear infinite;
+        animation: uil-default-anim 1s linear infinite;
+        -webkit-animation-delay: 0.33333333333333337s;
+        animation-delay: 0.33333333333333337s;
+    }
+
+    .uil-default-css > div:nth-of-type(12) {
+        -webkit-animation: uil-default-anim 1s linear infinite;
+        animation: uil-default-anim 1s linear infinite;
+        -webkit-animation-delay: 0.41666666666666663s;
+        animation-delay: 0.41666666666666663s;
+    }
+
+    </style>
+</head>
+<body>
+<div class="first">
+    <div class="description">
+        <header>
+            <div class="inner"><a href="/">
+                <div class="logo"></div>
+            </a><a href="/" class="home">Mjølfjell vandrarheim</a></div>
+        </header>
+        <p>Ved Bergensbanen øvst i Raundalen der Rallarvegen mot Voss får fast dekke, finn ein Mjølfjell vandrarheim- som innfalsporten til Hardangervidda.</p>
+        <p>Anlegget ligg i storslått natur og kan sommar som vinter tilby eit unikt og allsidig turterreng.</p>
+    </div>
+    <div class="mainImage"></div>
+</div>
+<!--div class="second">
+    <div class="location"></div>
+    <div class="travel"></div>
+    <div class="review">
+        Even though I was only here for one day and I was the only person staying in the hostel Eric made me feel very at home. It was an adventure and a memorable experience that tops any so far in Norway. I had a great time and I would definitely stay here again.. Maybe I would be a little more prepared next time ;) It is a little off the beaten track but for me that made it even better.Don't stay here if you are not interested in nature and occupying yourself as it is reasonably isolated but amazing.
+
+    </div>
+</div-->
+<form>
+    <div class="dates">
+        <div class="inner">
+            <div class="date">
+                <label for="datepicker_start">
+                    <svg fill="#fff" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                    </svg>
+                    Arrival
+                </label><input type="text" id="datepicker_start">
+            </div>
+            <div class="date"><label for="datepicker_stop">
+                <svg fill="#fff" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                    <path d="M0 0h24v24H0z" fill="none"/>
+                </svg>
+                Departure
+            </label><input type="text" id="datepicker_stop">
+            </div>
+        </div>
+    </div>
+    <main>
+        <div class="inner">
+            <div id="loading-rooms">
+                <div class='uil-default-css' style='transform:scale(0.6);'>
+                    <div style='top:80px;left:93px;width:14px;height:40px;background:#00b2ff;-webkit-transform:rotate(0deg) translate(0,-60px);transform:rotate(0deg) translate(0,-60px);border-radius:10px;position:absolute;'></div>
+                    <div style='top:80px;left:93px;width:14px;height:40px;background:#00b2ff;-webkit-transform:rotate(30deg) translate(0,-60px);transform:rotate(30deg) translate(0,-60px);border-radius:10px;position:absolute;'></div>
+                    <div style='top:80px;left:93px;width:14px;height:40px;background:#00b2ff;-webkit-transform:rotate(60deg) translate(0,-60px);transform:rotate(60deg) translate(0,-60px);border-radius:10px;position:absolute;'></div>
+                    <div style='top:80px;left:93px;width:14px;height:40px;background:#00b2ff;-webkit-transform:rotate(90deg) translate(0,-60px);transform:rotate(90deg) translate(0,-60px);border-radius:10px;position:absolute;'></div>
+                    <div style='top:80px;left:93px;width:14px;height:40px;background:#00b2ff;-webkit-transform:rotate(120deg) translate(0,-60px);transform:rotate(120deg) translate(0,-60px);border-radius:10px;position:absolute;'></div>
+                    <div style='top:80px;left:93px;width:14px;height:40px;background:#00b2ff;-webkit-transform:rotate(150deg) translate(0,-60px);transform:rotate(150deg) translate(0,-60px);border-radius:10px;position:absolute;'></div>
+                    <div style='top:80px;left:93px;width:14px;height:40px;background:#00b2ff;-webkit-transform:rotate(180deg) translate(0,-60px);transform:rotate(180deg) translate(0,-60px);border-radius:10px;position:absolute;'></div>
+                    <div style='top:80px;left:93px;width:14px;height:40px;background:#00b2ff;-webkit-transform:rotate(210deg) translate(0,-60px);transform:rotate(210deg) translate(0,-60px);border-radius:10px;position:absolute;'></div>
+                    <div style='top:80px;left:93px;width:14px;height:40px;background:#00b2ff;-webkit-transform:rotate(240deg) translate(0,-60px);transform:rotate(240deg) translate(0,-60px);border-radius:10px;position:absolute;'></div>
+                    <div style='top:80px;left:93px;width:14px;height:40px;background:#00b2ff;-webkit-transform:rotate(270deg) translate(0,-60px);transform:rotate(270deg) translate(0,-60px);border-radius:10px;position:absolute;'></div>
+                    <div style='top:80px;left:93px;width:14px;height:40px;background:#00b2ff;-webkit-transform:rotate(300deg) translate(0,-60px);transform:rotate(300deg) translate(0,-60px);border-radius:10px;position:absolute;'></div>
+                    <div style='top:80px;left:93px;width:14px;height:40px;background:#00b2ff;-webkit-transform:rotate(330deg) translate(0,-60px);transform:rotate(330deg) translate(0,-60px);border-radius:10px;position:absolute;'></div>
+                </div>
+            </div>
+            <div class="rooms">
+            </div>
+            <div class="extras">
+                <h2>Get the most out of your stay</h2>
+                                <figure class="extra"><input type="checkbox" name="roomType" value="dfc4bb8e-2440-4c5a-a1de-2be81c18c7ca"
+                                             id="dfc4bb8e-2440-4c5a-a1de-2be81c18c7ca"><label for="dfc4bb8e-2440-4c5a-a1de-2be81c18c7ca"><h3>Breakfast</h3><img
+                        src="http://placehold.it/400x267"/></label><div class="price">€10</div></figure>
+                                <figure class="extra"><input type="checkbox" name="roomType" value="52b1925c-b81c-413c-a43b-7840b2e9484a"
+                                             id="52b1925c-b81c-413c-a43b-7840b2e9484a"><label for="52b1925c-b81c-413c-a43b-7840b2e9484a"><h3>Towels</h3><img
+                        src="http://placehold.it/400x267"/></label><div class="price">€2</div></figure>
+                            </div>
+        </div>
+    </main>
+</form>
+<footer>
+    <div class="inner">
+        <address>
+            Mjølfjell vandrarheim<br/>
+            Mjølfjell, 5700<br/>
+            <br/>
+            <a href="mailto:mjolfjell.ungdomsherberge@gmail.com">mjolfjell.ungdomsherberge@gmail.com</a><br/>
+            <a href="tel:+4790557360">+4790557360</a><br/>
+
+        </address>
+    </div>
+</footer>
+<script src="lib/moment.js"></script>
+<script src="lib/locale/nb.js"></script>
+<script src="lib/pikaday.js"></script>
+<script src="lib/cleave.js"></script>
+<script>
+    var startDate,
+        endDate;
+    if (moment().isoWeekday() <= 5) {
+        // then just give me this week's instance of that day
+        startDate = moment().startOf('day').add(1, 'weeks').isoWeekday(5).toDate();
+        endDate = moment().startOf('day').add(2, 'weeks').isoWeekday(0).toDate();
+    } else {
+        // otherwise, give me next week's instance of that day
+        startDate = moment().startOf('day').add(2, 'weeks').isoWeekday(5).toDate();
+        endDate = moment().startOf('day').add(3, 'weeks').isoWeekday(0).toDate();
+    }
+
+    let roomCategories = {"c095b4f6-3aa2-49ed-9723-bece6fddddaa":{"name":"4 Bed Female Dorm","images":["http://placehold.it/400x267"],"type":"DORM"},"cfe94fb0-b8de-40fb-a96e-4e4bbc111da0":{"name":"4 Bed Male Dorm","images":["http://placehold.it/400x267"],"type":"DORM"},"ec2026b8-65e7-4ee9-a00c-7ee627ff7e6b":{"name":"Bed in 4 Bed Female Dorm","images":["http://placehold.it/400x267"],"type":"BED"},"59214625-3737-4383-950c-9d8df59572b2":{"name":"Bed in 4 Bed Male Dorm","images":["http://placehold.it/400x267"],"type":"BED"},"93f2379b-930b-4aaa-a32c-9101c75b4676":{"name":"Bed in 8 Bed Dorm","images":["http://placehold.it/400x267"],"type":"BED"},"75aaddb7-6a30-421d-a07d-c8cdbb6cee67":{"name":"Bed in 8 Bed Female Dorm","images":["http://placehold.it/400x267"],"type":"BED"},"99bfcc19-d4b3-4215-9040-0032e8773d3d":{"name":"Bed in 4 Bed Dorm","images":["http://placehold.it/400x267"],"type":"BED"},"91b35434-e999-4580-ad7f-256c050d6232":{"name":"Bed in Family Room","images":["http://placehold.it/400x267"],"type":"BED"},"73e274ea-1f8f-43f4-89a2-f4a56945d62c":{"name":"Bed in Double Ensuite River View","images":["http://placehold.it/400x267"],"type":"BED"},"ce105397-c473-452e-8d63-0a2858b8e4b6":{"name":"Bed in Double Ensuite Street View","images":["http://placehold.it/400x267"],"type":"BED"},"6528175e-675b-4080-90cd-fefa472e7d56":{"name":"Bed in Twin Ensuite Street View","images":["http://placehold.it/400x267"],"type":"BED"},"1e1a2cb9-ad4c-404a-91c7-b0a92aeca416":{"name":"Bed in Luxury Room","images":["http://placehold.it/400x267"],"type":"BED"},"e6987e00-d5cb-47b1-b4e9-b4c95900b466":{"name":"8 Bed Dorm","images":["http://placehold.it/400x267"],"type":"DORM"},"338da649-8ac6-4d26-938b-b9958acc9af0":{"name":"8 Bed Female Dorm","images":["http://placehold.it/400x267"],"type":"DORM"},"6acfd993-d9ed-49e8-afb2-871b652881dc":{"name":"5 Bed Dorm","images":["http://placehold.it/400x267"],"type":"DORM"},"c45428c6-5a5d-4fb8-8f80-b34bebe1aaa5":{"name":"4 Bed Dorm","images":["http://placehold.it/400x267"],"type":"DORM"},"de884bb5-8ecf-4d24-a6b5-2c38bbf17d1d":{"name":"Family Room","images":["http://placehold.it/400x267"],"type":"ROOM"},"202fef0a-4c96-4f39-b81c-f10a0a0f116e":{"name":"Double Ensuite Street View","images":["http://placehold.it/400x267"],"type":"ROOM"},"121db1aa-214f-4f98-aed4-7fdc47a5fc6c":{"name":"Double Ensuite River View","images":["http://placehold.it/400x267"],"type":"ROOM"},"7e0f927f-6aa5-4637-b3a5-64ebdf3a2688":{"name":"Twin Ensuite Street View","images":["http://placehold.it/400x267"],"type":"ROOM"},"48c1a556-5f43-47ef-8f50-77d86f46faea":{"name":"Luxury Room","images":["http://placehold.it/400x267"],"type":"ROOM"}};
+
+    function getAvailability() {
+        document.getElementById('loading-rooms').style.display = 'block';
+
+
+        fetch('https://demo.mews.li/api/distributor/v1/hotels/getAvailability', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({
+                "Client": "Mjolfjell 1.0.0",
+                //"HotelId": "2b5a4f41-b367-4235-a08f-f5fb3595948a"
+                "HotelId": "fa940cf7-b7dd-4ec5-a52c-5425ff69313b",
+                "StartUtc": moment(startDate).toISOString(),
+                "EndUtc": moment(endDate).toISOString()
+            })
+        }).then(function (result) {
+            return result.json();
+        }).then(function (res) {
+
+            var result = [];
+            for (var i = 0; i < res.RoomCategoryAvailabilities.length; i++) {
+                var rca = res.RoomCategoryAvailabilities[i];
+                var room = Object.assign({},roomCategories[rca.RoomCategoryId]);
+                if (room.type=="DORM") continue;
+                room.available = rca.AvailableRoomCount;
+                room.availabilityTypes = [];
+                for (var j = 0; j < rca.RoomOccupancyAvailabilities.length; j++) {
+                    var roa = rca.RoomOccupancyAvailabilities[j];
+                    if (j==0) {
+                        room.price=roa.Pricing[0].Price.AveragePerNight["EUR"];
+                    }
+                    room.availabilityTypes.push({adult:roa.AdultCount,child:roa.ChildCount,price:{total:roa.Pricing[0].Price.Total["EUR"], averageNight: roa.Pricing[0].Price.AveragePerNight["EUR"]}});
+                }
+                //room.averagePrice = rca.Pricing[0].Price.AveragePerNight;
+                //room.totalPrice = rca.Pricing[0].Price.Total;
+                result.push(room);
+            }
+
+
+            document.querySelector('body .rooms').innerHTML = '<input type="hidden" name="adultCount" id="adultCount" value="0"><input type="hidden" name="childCount" id="childCount" value="0">';
+            for (var i = 0; i < result.length; i++) {
+                var room = result[i];
+                var caption = "";
+                if (room.available < 10) {
+                    if (room.type == "BED") {
+                        if (room.available == 1) {
+                            caption = "Only 1 bed available";
+                        } else {
+                            caption = 'Only ' + room.available + ' beds available';
+                        }
+                    } else {
+                        if (room.available == 1) {
+                            caption = "Only 1 room available";
+                        } else {
+                            caption = 'Only ' + room.available + ' rooms available';
+                        }
+                    }
+                }
+                if (i==0) {
+                    document.getElementById('adultCount').value=room.availabilityTypes[0].adult;
+                    document.getElementById('childCount').value=room.availabilityTypes[0].child;
+                }
+                document.querySelector('body .rooms').insertAdjacentHTML('beforeend', '<figure class="room"><input data-availability-types=\'' + JSON.stringify(room.availabilityTypes) + '\' onClick="showRoomInfo(this,' + room.available + ')" type="radio" name="roomType" value="' + room.type + '" id="roomType' + room.type + '"><label for="roomType' + room.type + '"><h3>' + room.name + '</h3><img src="' + room.images[0] + '"/></label><figcaption>' + caption + '</figcaption><div class="price">€'+room.price+'</div></figure>');
+            }
+            document.querySelector('body .rooms').insertAdjacentHTML('beforeend', '<figure class="room"><a href="mailto:mjolfjell.ungdomsherberge@gmail.com?subject=Group booking"><label><h3>Group Reservation</h3><img src="http://placehold.it/400x267"></label></a></figure>');
+            document.getElementById('loading-rooms').style.display = 'none';
+        });
+    };
+
+    var updateStartDate = function (ignoreUpdate) {
+            if (+startDate >= +endDate) {
+                endDate = moment(startDate).add(2, 'days').toDate();
+                startPicker.setEndRange(endDate);
+                endPicker.setEndRange(endDate);
+                endPicker.gotoDate(endDate);
+                document.getElementById('datepicker_stop').value = moment(endDate).format('MMMM Do');
+            }
+            startPicker.setStartRange(startDate);
+            endPicker.setStartRange(startDate);
+            endPicker.setMinDate(startDate);
+            if (!ignoreUpdate) {
+                getAvailability();
+            }
+        },
+        updateEndDate = function (ignoreUpdate) {
+            startPicker.setEndRange(endDate);
+            //startPicker.setMaxDate(endDate);
+            endPicker.setEndRange(endDate);
+            if (!ignoreUpdate) {
+                getAvailability();
+            }
+        },
+        startPicker = new Pikaday({
+            field: document.getElementById('datepicker_start'),
+            format: 'MMMM Do', minDate: new Date(),
+            maxDate: new Date(2020, 12, 31),
+            defaultDate: startDate,
+            onSelect: function (date) {
+                startDate = date;
+                updateStartDate();
+                setTimeout(function () {
+                    endPicker.show();
+                }, 0);
+            },
+            i18n: {
+                months        : moment.localeData()._months,
+                weekdays      : moment.localeData()._weekdays,
+                weekdaysShort : moment.localeData()._weekdaysShort
+            }
+        }),
+        endPicker = new Pikaday({
+            field: document.getElementById('datepicker_stop'),
+            format: 'MMMM Do',
+            defaultDate: endDate,
+            onSelect: function (date) {
+                endDate = date;
+                updateEndDate();
+            },
+            i18n: {
+                months        : moment.localeData()._months,
+                weekdays      : moment.localeData()._weekdays,
+                weekdaysShort : moment.localeData()._weekdaysShort
+            }
+        });
+
+    updateStartDate(true);
+    updateEndDate(true);
+    getAvailability();
+
+    document.getElementById('datepicker_start').value = moment(startDate).format('MMMM Do');
+    document.getElementById('datepicker_stop').value = moment(endDate).format('MMMM Do');
+
+    var adult = '<?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="16" height="28" viewBox="0 0 16 28"><path d="M16 11v6.5c0 0.828-0.672 1.5-1.5 1.5s-1.5-0.672-1.5-1.5v-5.5h-1v14.25c0 0.969-0.781 1.75-1.75 1.75s-1.75-0.781-1.75-1.75v-7.25h-1v7.25c0 0.969-0.781 1.75-1.75 1.75s-1.75-0.781-1.75-1.75v-14.25h-1v5.5c0 0.828-0.672 1.5-1.5 1.5s-1.5-0.672-1.5-1.5v-6.5c0-1.656 1.344-3 3-3h10c1.656 0 3 1.344 3 3zM11.5 4c0 1.937-1.563 3.5-3.5 3.5s-3.5-1.563-3.5-3.5 1.563-3.5 3.5-3.5 3.5 1.563 3.5 3.5z"></path></svg>';
+    var child = '<?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="15" height="21" viewBox="0 0 20 28"><path d="M18.562 8.563l-4.562 4.562v12.875c0 0.969-0.781 1.75-1.75 1.75s-1.75-0.781-1.75-1.75v-6h-1v6c0 0.969-0.781 1.75-1.75 1.75s-1.75-0.781-1.75-1.75v-12.875l-4.562-4.562c-0.578-0.594-0.578-1.531 0-2.125 0.594-0.578 1.531-0.578 2.125 0l3.563 3.563h5.75l3.563-3.563c0.594-0.578 1.531-0.578 2.125 0 0.578 0.594 0.578 1.531 0 2.125zM13.5 6c0 1.937-1.563 3.5-3.5 3.5s-3.5-1.563-3.5-3.5 1.563-3.5 3.5-3.5 3.5 1.563 3.5 3.5z"></path></svg>';
+
+    function showPrice(target, price) {
+        var priceNode = document.querySelector('.price');
+        if (priceNode) {
+            priceNode.parentNode.removeChild(priceNode);
+        }
+        priceNode = document.createElement("div");
+        priceNode.className="price";
+        priceNode.innerHTML='€'+price;
+        target.appendChild(priceNode);
+    }
+
+    function showOccupants(target, adultCount, childCount) {
+        var old = document.querySelector('.occupants');
+        if (old) {
+            old.parentNode.removeChild(old);
+        }
+        var occupants = document.createElement("div");
+        occupants.className="occupants";
+        var occupantsContent = document.createElement("content");
+        occupantsContent.className="occupantsContent";
+        if (adultCount+childCount>4) {
+            occupantsContent.innerHTML= (adultCount>0?""+adultCount+adult+' ':'')+(childCount>0?childCount+child:'');
+        } else {
+            occupantsContent.innerHTML=adult.repeat(adultCount)+child.repeat(childCount);
+        }
+        occupants.appendChild(occupantsContent);
+        target.appendChild(occupants);
+    }
+
+    function createOrder(bookingText, price, currency) {
+        var oldSummary = document.querySelector('.orderSummary');
+        if (oldSummary) {
+            oldSummary.parentNode.removeChild(oldSummary);
+        }
+        var orderSummary = document.createElement('div');
+        orderSummary.className = 'orderSummary';
+
+        orderSummary.insertAdjacentHTML('afterbegin',
+                '<div class="inner">'+
+                '<div class="order">'+
+                '<button>Proceed</button>'+
+                '<table>'+
+                    '<tr>'+
+                    '<td>'+bookingText+'</td><td>'+price+'</td>'+
+                    '</tr>'+
+                    '<tr>'+
+                    '<td></td><td></td>'+
+                    '</tr>'+
+                    '<tr>'+
+                    '<td></td><td></td>'+
+                    '</tr>'+
+                '</table>'+
+                '</div>'+
+                '<form action="">' +
+            '<div class="mui-textfield mui-textfield--float-label">' +
+            '<input type="text" name="fullname" id="fullname">' +
+            '<label for="fullname">Name on card</label>' +
+            '</div>' +
+                '<div class="mui-textfield mui-textfield--float-label card">' +
+                '<input type="text" name="cardnumber" id="cardnumber">' +
+                '<label for="cardnumber">Card number</label>' +
+                '</div>' +
+                '<div class="mui-textfield mui-textfield--float-label expiration">' +
+                '<input type="text" name="cc-exp" id="frmCCExp" autocomplete="cc-exp">' +
+                '<label for="cc-exp">Expiry</label>' +
+                '</div>' +
+                '<div class="mui-textfield mui-textfield--float-label cvc">' +
+                '<input type="text" name="cvc" id="frmCCCVC" autocomplete="cc-csc">' +
+                '<label for="frmCCCVC">CVC</label>' +
+                '</div>' +
+                '<div class="mui-select">' +
+                '<select name="country">' +
+                '<option value="no">Norway</option>'+
+                '</select>'+
+                '<label>Country</label>'+
+        '</div>' +
+            '<div class="mui-textfield mui-textfield--float-label">' +
+            '<input type="email" name="email" id="email">' +
+            '<label for="email">Email</label>' +
+            '</div>'+
+            '</form>'+
+            '</div>');
+
+        // use to get country from visa number: https://binlist.net/json/431940
+        document.body.appendChild(orderSummary);
+    }
+
+    function showRoomInfo(input, available) {
+        var oldPopup = document.querySelector('.popup');
+        if (oldPopup) {
+            document.body.removeChild(oldPopup);
+            if (oldPopup.id == 'popup' + input.value) {
+                return;
+            }
+        }
+        var popup = document.createElement("div");
+        var h4 = document.createElement("h4");
+        var body = document.createElement("section");
+        availabilityTypes = JSON.parse(input.dataset.availabilityTypes);
+
+        var currentAdultCount = Number(document.getElementById('adultCount').value);
+        var currentChildCount = Number(document.getElementById('childCount').value);
+
+        if (input.value == 'BED') {
+            var getDescription = function() {
+                var description;
+                if (currentAdultCount>0 && currentChildCount > 0) {
+                    if (currentAdultCount == 1 && currentChildCount == 1) {
+                        description = '1 adult dorm bed and 1 child dorm bed';
+                    } else if (currentAdultCount == 1) {
+                        description = '1 adult dorm bed and %d child dorm beds'.replace('%d',currentChildCount);
+                    } else if (currentChildCount == 1) {
+                        description = '%d adult dorm beds and 1 child dorm bed'.replace('%d',currentAdultCount);
+                    } else {
+                        description = '%d adult dorm beds and %d child dorm bed'.replace('%d',currentAdultCount).replace('%d',currentChildCount);
+                    }
+                } else if (currentAdultCount>0) {
+                    if (currentAdultCount == 1) {
+                        description = '1 adult dorm bed';
+                    } else {
+                        description = '%d adult dorm beds'.replace('%d',currentAdultCount);
+                    }
+                } else {
+                    if (currentChildCount == 1) {
+                        description = '1 child dorm bed';
+                    } else {
+                        description = '%d child dorm beds'.replace('%d',currentChildCount);
+                    }
+                }
+                return description;
+            };
+            h4.appendChild(document.createTextNode("How many beds do you need?"));
+            var adultPrice, childPrice;
+            var totalAdultPrice, totalChildPrice;
+            for (var i = 0; i < availabilityTypes.length; i++) {
+                var at = availabilityTypes[i];
+                var label = document.createElement("label");
+                label.appendChild(document.createTextNode(at.adult ? 'Adult' : 'Child'));
+                var toggle = document.createElement("input");
+                toggle.type = "number";
+                toggle.id = "";
+                toggle.min = 0;
+                toggle.max = available;
+                toggle.name = at.adult ? 'adult' : 'child';
+                toggle.value = at.adult ? currentAdultCount : currentChildCount;
+                toggle.pattern = "[0-9]*";
+                if (at.adult) {
+                    adultPrice = at.price.averageNight;
+                    totalAdultPrice = at.price.total;
+                } else {
+                    childPrice = at.price.averageNight;
+                    totalChildPrice = at.price.total;
+                }
+                toggle.onkeyup = function (event) {
+                    event.preventDefault();
+                    if (event.keyCode == 13) {
+                        currentAdultCount = Number(body.querySelector('input[name=adult]').value);
+                        currentChildCount = Number(body.querySelector('input[name=child]').value);
+                        document.getElementById('adultCount').value=currentAdultCount;
+                        document.getElementById('childCount').value=currentChildCount;
+                        document.body.removeChild(popup);
+                        showOccupants(input.parentNode,Number(body.querySelector('input[name=adult]').value),Number(body.querySelector('input[name=child]').value));
+                        createOrder(getDescription(), (totalAdultPrice*currentAdultCount)+(totalChildPrice*currentChildCount), 'NOK');
+                        showPrice(input.parentNode,(adultPrice*currentAdultCount)+(childPrice*currentChildCount));
+                    }
+                };
+                label.appendChild(toggle);
+                body.appendChild(label);
+            }
+            var button = document.createElement("button");
+            button.innerHTML="OK";
+            button.onclick=function(event) {
+                event.preventDefault();
+                currentAdultCount = Number(body.querySelector('input[name=adult]').value);
+                currentChildCount = Number(body.querySelector('input[name=child]').value);
+                document.getElementById('adultCount').value=currentAdultCount;
+                document.getElementById('childCount').value=currentChildCount;
+                document.body.removeChild(popup);
+                showOccupants(input.parentNode,currentAdultCount,currentChildCount);
+                createOrder(getDescription(), (totalAdultPrice*currentAdultCount)+(totalChildPrice*currentChildCount), 'NOK');
+                showPrice(input.parentNode,(adultPrice*currentAdultCount)+(childPrice*currentChildCount));
+            };
+            body.appendChild(button);
+        } else {
+            var getDescription = function() {
+                var description;
+                if (currentAdultCount>0 && currentChildCount > 0) {
+                    if (currentAdultCount == 1 && currentChildCount == 1) {
+                        description = 'Room with 1 adult and 1 child';
+                    } else if (currentAdultCount == 1) {
+                        description = 'Room with 1 adult and %d children'.replace('%d',currentChildCount);
+                    } else if (currentChildCount == 1) {
+                        description = 'Room with %d adults and 1 child'.replace('%d',currentAdultCount);
+                    } else {
+                        description = 'Room with %d adult and %d children'.replace('%d',currentAdultCount).replace('%d',currentChildCount);
+                    }
+                } else if (currentAdultCount>0) {
+                    if (currentAdultCount == 1) {
+                        description = 'Room with 1 adult';
+                    } else {
+                        description = 'Room with %d adults'.replace('%d',currentAdultCount);
+                    }
+                } else {
+                    if (currentChildCount == 1) {
+                        description = 'Room with 1 child';
+                    } else {
+                        description = 'Room with %d children'.replace('%d',currentChildCount);
+                    }
+                }
+                return description;
+            };
+            h4.appendChild(document.createTextNode("How many people will stay in the room?"));
+            for (var i = 0; i < availabilityTypes.length; i++) {
+                var at = availabilityTypes[i];
+                var option = document.createElement("input");
+                option.type = "radio";
+                option.name="occupants";
+                option.id=input.value+'_'+at.adult+'_'+at.child;
+                if (at.adult==currentAdultCount&&at.child==currentChildCount) {
+                    option.checked = true;
+                }
+                option.value=at.adult+'_'+at.child;
+                var optionLabel = document.createElement("label");
+                optionLabel.htmlFor=input.value+'_'+at.adult+'_'+at.child;
+                optionLabel.innerHTML=adult.repeat(at.adult)+child.repeat(at.child);
+                    // (at.adult==0?'':(at.adult==1?'1 adult':at.adult+' adults'))+' '+(at.child==0?'':(at.child==1?'1 child':at.child+' children'));
+                option.onclick=function(event) {
+                    currentAdultCount = Number(this.value.split('_')[0]);
+                    currentChildCount = Number(this.value.split('_')[1]);
+                    document.getElementById('adultCount').value=currentAdultCount;
+                    document.getElementById('childCount').value=currentChildCount;
+                    document.body.removeChild(popup);
+                    showOccupants(input.parentNode,currentAdultCount,currentChildCount);
+                    createOrder(getDescription(), 100, 'NOK');
+                };
+                var person = document.createElement("div");
+                person.className='person';
+                person.appendChild(option);
+                person.appendChild(optionLabel);
+                body.appendChild(person);
+            }
+        }
+        popup.appendChild(h4);
+        popup.appendChild(body);
+        popup.className = 'popup '+input.value;
+        popup.id = 'popup' + input.value;
+        popup.style.top = '-1000px';
+        popup.style.left = '-1000px';
+        document.body.appendChild(popup);
+
+        popup.style.top = (input.getBoundingClientRect().top + input.getBoundingClientRect().height - 110 + document.body.scrollTop) + 'px';
+        popup.style.left = (input.getBoundingClientRect().left + (input.getBoundingClientRect().width / 2) - (popup.getBoundingClientRect().width / 2)) + 'px';
+
+    }
+</script>
+</body>
+</html>
