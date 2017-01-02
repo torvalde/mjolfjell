@@ -1,0 +1,23 @@
+{
+  "name": "mjolfjell",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cleave.js": "^0.7.14",
+    "color": "^1.0.3",
+    "express": "^4.14.0",
+    "image-size": "^0.5.1",
+    "mkdirp": "^0.5.1",
+    "muicss": "^0.9.7",
+    "node-fetch": "^1.6.3",
+    "normalize.css": "^5.0.0",
+    "pikaday": "^1.5.1",
+    "twig": "^0.10.3"
+  }
+}

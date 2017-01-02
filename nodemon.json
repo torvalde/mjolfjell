@@ -1,0 +1,13 @@
+{
+  "verbose": true,
+  "ext": "js twig json",
+  "execMap": {
+    "js": "node --harmony --debug=5959"
+  },
+  "watch": [
+    "templates/index.html",
+    "app.js",
+    "package.json",
+    "nodemon.json"
+  ]
+}
