@@ -17,6 +17,7 @@
     "muicss": "^0.9.7",
     "node-fetch": "^1.6.3",
     "normalize.css": "^5.0.0",
+    "payment-icons": "0.0.12",
     "pikaday": "^1.5.1",
     "twig": "^0.10.3"
   }

@@ -14,7 +14,7 @@ function render() {
     return new Promise((resolve, reject) => {
         twig.renderFile('templates/index.twig', siteData, (error, html) => {
             // resolve(html);
-            let destinationPath = 'public/index.html';
+            let destinationPath = 'docs/index.html';
             mkdirp(path.dirname(destinationPath), error => {
                 if (error) {
                     throw error;
@@ -52,14 +52,20 @@ var initialize = fetch('https://demo.mews.li/api/distributor/v1/hotels/get', {
     siteData.name = result.Name['en-US'];
     siteData.email = result.Email;
     siteData.supportedCards = [];
-    for (var i = 0; i < result.PaymentGateway.SupportedCreditCardTypes.length; i++) {
+    for (let i = 0; i < result.PaymentGateway.SupportedCreditCardTypes.length; i++) {
         var card = result.PaymentGateway.SupportedCreditCardTypes[i];
         siteData.supportedCards.push(card);
     }
+    siteData.countries = [];
+    for (let i = 0; i < result.Countries.length; i++) {
+        var country = result.Countries[i];
+        siteData.countries.push({code:country.Code,name:country.Name});
+    }
+
     // siteData.description = result.Description['en-US'];
 
     siteData.roomCategories = {};
-    for (var i = 0; i < result.RoomCategories.length; i++) {
+    for (let i = 0; i < result.RoomCategories.length; i++) {
         var room = result.RoomCategories[i];
         var roomImages = [];
         for (var j = 0; j < room.ImageIds.length; j++) {
@@ -93,7 +99,7 @@ var initialize = fetch('https://demo.mews.li/api/distributor/v1/hotels/get', {
     }).then(function (result) {
         siteData.imageInfo = sizeOf(result);
         return new Promise(function(resolve, reject) {
-            let outfile = 'public/bg.jpeg';
+            let outfile = 'docs/bg.jpeg';
             fs.writeFile(outfile, result, function (err) {
                 if (err) return reject(err);
                 return resolve(outfile);
@@ -104,7 +110,7 @@ var initialize = fetch('https://demo.mews.li/api/distributor/v1/hotels/get', {
     }).then(function (result) {
         siteData.logoInfo = sizeOf(result);
         return new Promise(function(resolve, reject) {
-            let outfile = 'public/logo.png';
+            let outfile = 'docs/logo.png';
             fs.writeFile(outfile, result, function (err) {
                 if (err) return reject(err);
                 return resolve(outfile);

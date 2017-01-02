@@ -317,13 +317,24 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
         .occupantsContent svg {
             margin-left: 2px;
         }
+        body.showPay  .orderSummary {
+            position: absolute;
+            top:0;
+            height: auto;
+            min-height: 100%;
+        }
+        body.showPay  .page {
+            display: none;
+        }
         .orderSummary {
             position: fixed;
             bottom:0;
             left:0;
             width:100%;
-            background: green;
+            background: white;
             font-size: 16px;
+            padding-top: 30px;
+            height: 130px;
         }
         .orderSummary .order {
             overflow: hidden;
@@ -332,7 +343,15 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
             float: right;
         }
         .orderSummary table {
+            padding-right: 100px;
             float: right;
+        }
+        .orderSummary table tr td:first-child{
+            width: 400px;
+        }
+        .orderSummary table tr td:nth-child(2) {
+            min-width: 50px;
+            text-align: right;
         }
         .orderSummary h2 {
             margin:0;
@@ -342,6 +361,26 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
         .orderSummary form {
             margin: 2em 0;
             width: 480px;
+        }
+        .mui-textfield>label {
+            overflow: visible;
+        }
+        .mui-select>label {
+            overflow: visible;
+        }
+        .orderSummary .card {
+            width: 260px;
+            display: inline-block;
+        }
+        .orderSummary .expiration {
+            width: 80px;
+            display: inline-block;
+            margin-left: 30px;
+        }
+        .orderSummary .cvc {
+            width: 80px;
+            display: inline-block;
+            margin-left: 30px;
         }
     </style>
     <style type='text/css'>
@@ -458,6 +497,7 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
     </style>
 </head>
 <body>
+<div class="page">
 <div class="first">
     <div class="description">
         <header>
@@ -543,6 +583,7 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
         </address>
     </div>
 </footer>
+</div>
 <script src="lib/moment.js"></script>
 <script src="lib/locale/nb.js"></script>
 <script src="lib/pikaday.js"></script>
@@ -561,6 +602,7 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
     }
 
     let roomCategories = {{roomCategories|json_encode()}};
+    let countries = {{countries|json_encode()}};
 
     function getAvailability() {
         document.getElementById('loading-rooms').style.display = 'block';
@@ -736,10 +778,17 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
         var orderSummary = document.createElement('div');
         orderSummary.className = 'orderSummary';
 
+        var allCountriesOptions = '';
+
+        for (var i = 0; i < countries.length; i++) {
+            var c = countries[i];
+            allCountriesOptions+='<option value="'+c.code+'">'+c.name+'</option>';
+        }
+
         orderSummary.insertAdjacentHTML('afterbegin',
                 '<div class="inner">'+
                 '<div class="order">'+
-                '<button>Proceed</button>'+
+                '<button class="mui-btn mui-btn--large mui-btn--primary mui-btn--raised" id="orderRoom">Order room</button>'+
                 '<table>'+
                     '<tr>'+
                     '<td>'+bookingText+'</td><td>'+price+'</td>'+
@@ -771,7 +820,7 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
                 '</div>' +
                 '<div class="mui-select">' +
                 '<select name="country">' +
-                '<option value="no">Norway</option>'+
+                allCountriesOptions+
                 '</select>'+
                 '<label>Country</label>'+
         '</div>' +
@@ -779,11 +828,50 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
             '<input type="email" name="email" id="email">' +
             '<label for="email">Email</label>' +
             '</div>'+
+                '<button class="mui-btn mui-btn--large mui-btn--primary mui-btn--raised" id="pay">Pay for room</button>'+
             '</form>'+
             '</div>');
 
         // use to get country from visa number: https://binlist.net/json/431940
         document.body.appendChild(orderSummary);
+        document.getElementById("orderRoom").onclick=function() {
+            document.body.classList.add("showPay");
+        };
+        document.getElementById("pay").onclick=function() {
+            fetch('https://demo.mews.li/api/distributor/v1/payments/getAdyenClientToken', {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    "Client": "Mjolfjell 1.0.0",
+                    "HotelId": "fa940cf7-b7dd-4ec5-a52c-5425ff69313b"
+                })
+            }).then(function (result) {
+                return result.json();
+            }).then(function (res) {
+                let nowUtc = res.NowUtc;
+                let publicKey = res.PublicKey;
+
+                return fetch('https://demo.mews.li/api/distributor/v1/reservationGroups/create', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: "POST",
+                    body: JSON.stringify({
+                        "Client": "Mjolfjell 1.0.0",
+                        "HotelId": "fa940cf7-b7dd-4ec5-a52c-5425ff69313b"
+                    })
+                }).then(function (result) {
+                    return result.json();
+                }).then(function (res) {
+                    let nowUtc = res.NowUtc;
+                    let publicKey = res.PublicKey;
+                });
+            });
+        };
     }
 
     function showRoomInfo(input, available) {

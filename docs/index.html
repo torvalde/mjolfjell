@@ -317,13 +317,24 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
         .occupantsContent svg {
             margin-left: 2px;
         }
+        body.showPay  .orderSummary {
+            position: absolute;
+            top:0;
+            height: auto;
+            min-height: 100%;
+        }
+        body.showPay  .page {
+            display: none;
+        }
         .orderSummary {
             position: fixed;
             bottom:0;
             left:0;
             width:100%;
-            background: green;
+            background: white;
             font-size: 16px;
+            padding-top: 30px;
+            height: 130px;
         }
         .orderSummary .order {
             overflow: hidden;
@@ -332,7 +343,15 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
             float: right;
         }
         .orderSummary table {
+            padding-right: 100px;
             float: right;
+        }
+        .orderSummary table tr td:first-child{
+            width: 400px;
+        }
+        .orderSummary table tr td:nth-child(2) {
+            min-width: 50px;
+            text-align: right;
         }
         .orderSummary h2 {
             margin:0;
@@ -342,6 +361,26 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
         .orderSummary form {
             margin: 2em 0;
             width: 480px;
+        }
+        .mui-textfield>label {
+            overflow: visible;
+        }
+        .mui-select>label {
+            overflow: visible;
+        }
+        .orderSummary .card {
+            width: 260px;
+            display: inline-block;
+        }
+        .orderSummary .expiration {
+            width: 80px;
+            display: inline-block;
+            margin-left: 30px;
+        }
+        .orderSummary .cvc {
+            width: 80px;
+            display: inline-block;
+            margin-left: 30px;
         }
     </style>
     <style type='text/css'>
@@ -458,6 +497,7 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
     </style>
 </head>
 <body>
+<div class="page">
 <div class="first">
     <div class="description">
         <header>
@@ -544,6 +584,7 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
         </address>
     </div>
 </footer>
+</div>
 <script src="lib/moment.js"></script>
 <script src="lib/locale/nb.js"></script>
 <script src="lib/pikaday.js"></script>
@@ -562,6 +603,7 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
     }
 
     let roomCategories = {"c095b4f6-3aa2-49ed-9723-bece6fddddaa":{"name":"4 Bed Female Dorm","images":["http://placehold.it/400x267"],"type":"DORM"},"cfe94fb0-b8de-40fb-a96e-4e4bbc111da0":{"name":"4 Bed Male Dorm","images":["http://placehold.it/400x267"],"type":"DORM"},"ec2026b8-65e7-4ee9-a00c-7ee627ff7e6b":{"name":"Bed in 4 Bed Female Dorm","images":["http://placehold.it/400x267"],"type":"BED"},"59214625-3737-4383-950c-9d8df59572b2":{"name":"Bed in 4 Bed Male Dorm","images":["http://placehold.it/400x267"],"type":"BED"},"93f2379b-930b-4aaa-a32c-9101c75b4676":{"name":"Bed in 8 Bed Dorm","images":["http://placehold.it/400x267"],"type":"BED"},"75aaddb7-6a30-421d-a07d-c8cdbb6cee67":{"name":"Bed in 8 Bed Female Dorm","images":["http://placehold.it/400x267"],"type":"BED"},"99bfcc19-d4b3-4215-9040-0032e8773d3d":{"name":"Bed in 4 Bed Dorm","images":["http://placehold.it/400x267"],"type":"BED"},"91b35434-e999-4580-ad7f-256c050d6232":{"name":"Bed in Family Room","images":["http://placehold.it/400x267"],"type":"BED"},"73e274ea-1f8f-43f4-89a2-f4a56945d62c":{"name":"Bed in Double Ensuite River View","images":["http://placehold.it/400x267"],"type":"BED"},"ce105397-c473-452e-8d63-0a2858b8e4b6":{"name":"Bed in Double Ensuite Street View","images":["http://placehold.it/400x267"],"type":"BED"},"6528175e-675b-4080-90cd-fefa472e7d56":{"name":"Bed in Twin Ensuite Street View","images":["http://placehold.it/400x267"],"type":"BED"},"1e1a2cb9-ad4c-404a-91c7-b0a92aeca416":{"name":"Bed in Luxury Room","images":["http://placehold.it/400x267"],"type":"BED"},"e6987e00-d5cb-47b1-b4e9-b4c95900b466":{"name":"8 Bed Dorm","images":["http://placehold.it/400x267"],"type":"DORM"},"338da649-8ac6-4d26-938b-b9958acc9af0":{"name":"8 Bed Female Dorm","images":["http://placehold.it/400x267"],"type":"DORM"},"6acfd993-d9ed-49e8-afb2-871b652881dc":{"name":"5 Bed Dorm","images":["http://placehold.it/400x267"],"type":"DORM"},"c45428c6-5a5d-4fb8-8f80-b34bebe1aaa5":{"name":"4 Bed Dorm","images":["http://placehold.it/400x267"],"type":"DORM"},"de884bb5-8ecf-4d24-a6b5-2c38bbf17d1d":{"name":"Family Room","images":["http://placehold.it/400x267"],"type":"ROOM"},"202fef0a-4c96-4f39-b81c-f10a0a0f116e":{"name":"Double Ensuite Street View","images":["http://placehold.it/400x267"],"type":"ROOM"},"121db1aa-214f-4f98-aed4-7fdc47a5fc6c":{"name":"Double Ensuite River View","images":["http://placehold.it/400x267"],"type":"ROOM"},"7e0f927f-6aa5-4637-b3a5-64ebdf3a2688":{"name":"Twin Ensuite Street View","images":["http://placehold.it/400x267"],"type":"ROOM"},"48c1a556-5f43-47ef-8f50-77d86f46faea":{"name":"Luxury Room","images":["http://placehold.it/400x267"],"type":"ROOM"}};
+    let countries = [{"code":"AX","name":"Aaland Islands"},{"code":"AF","name":"Afghanistan"},{"code":"AL","name":"Albania"},{"code":"DZ","name":"Algeria"},{"code":"AS","name":"American Samoa"},{"code":"AD","name":"Andorra"},{"code":"AO","name":"Angola"},{"code":"AI","name":"Anguilla"},{"code":"AQ","name":"Antarctica"},{"code":"AG","name":"Antigua and Barbuda"},{"code":"AR","name":"Argentina"},{"code":"AM","name":"Armenia"},{"code":"AW","name":"Aruba"},{"code":"AU","name":"Australia"},{"code":"AT","name":"Austria"},{"code":"AZ","name":"Azerbaijan"},{"code":"BS","name":"Bahamas"},{"code":"BH","name":"Bahrain"},{"code":"BD","name":"Bangladesh"},{"code":"BB","name":"Barbados"},{"code":"BY","name":"Belarus"},{"code":"BE","name":"Belgium"},{"code":"BZ","name":"Belize"},{"code":"BJ","name":"Benin"},{"code":"BM","name":"Bermuda"},{"code":"BT","name":"Bhutan"},{"code":"BO","name":"Bolivia"},{"code":"BA","name":"Bosnia and Herzegowina"},{"code":"BW","name":"Botswana"},{"code":"BV","name":"Bouvet Island"},{"code":"BR","name":"Brazil"},{"code":"IO","name":"British Indian Ocean Territory"},{"code":"BN","name":"Brunei Darussalam"},{"code":"BG","name":"Bulgaria"},{"code":"BF","name":"Burkina Faso"},{"code":"BI","name":"Burundi"},{"code":"KH","name":"Cambodia"},{"code":"CM","name":"Cameroon"},{"code":"CA","name":"Canada"},{"code":"CV","name":"Cape Verde"},{"code":"KY","name":"Cayman Islands"},{"code":"CF","name":"Central African Republic"},{"code":"TD","name":"Chad"},{"code":"CL","name":"Chile"},{"code":"CN","name":"China"},{"code":"CX","name":"Christmas Island"},{"code":"CC","name":"Cocos (Keeling) Islands"},{"code":"CO","name":"Colombia"},{"code":"KM","name":"Comoros"},{"code":"CD","name":"Congo (Democratic Republic, Was Zaire)"},{"code":"CG","name":"Congo (Republic)"},{"code":"CK","name":"Cook Islands"},{"code":"CR","name":"Costa Rica"},{"code":"CI","name":"Cote d'Ivoire"},{"code":"HR","name":"Croatia"},{"code":"CU","name":"Cuba"},{"code":"CY","name":"Cyprus"},{"code":"CZ","name":"Czech Republic"},{"code":"DK","name":"Denmark"},{"code":"DJ","name":"Djibouti"},{"code":"DM","name":"Dominica"},{"code":"DO","name":"Dominican Republic"},{"code":"EC","name":"Ecuador"},{"code":"EG","name":"Egypt"},{"code":"SV","name":"El Salvador"},{"code":"GQ","name":"Equatorial Guinea"},{"code":"ER","name":"Eritrea"},{"code":"EE","name":"Estonia"},{"code":"ET","name":"Ethiopia"},{"code":"FK","name":"Falkland Islands (Maalvinas)"},{"code":"FO","name":"Faroe Islands"},{"code":"FJ","name":"Fiji"},{"code":"FI","name":"Finland"},{"code":"FR","name":"France"},{"code":"GF","name":"French Guiana"},{"code":"PF","name":"French Polynesia"},{"code":"TF","name":"French Southern Territories"},{"code":"GA","name":"Gabon"},{"code":"GM","name":"Gambia"},{"code":"GE","name":"Georgia"},{"code":"DE","name":"Germany"},{"code":"GH","name":"Ghana"},{"code":"GI","name":"Gibraltar"},{"code":"GR","name":"Greece"},{"code":"GL","name":"Greenland"},{"code":"GD","name":"Grenada"},{"code":"GP","name":"Guadeloupe"},{"code":"GU","name":"Guam"},{"code":"GT","name":"Guatemala"},{"code":"GN","name":"Guinea"},{"code":"GW","name":"Guinea-bissau"},{"code":"GY","name":"Guyana"},{"code":"HT","name":"Haiti"},{"code":"HM","name":"Heard and Mc Donald Islands"},{"code":"HN","name":"Honduras"},{"code":"HK","name":"Hong Kong"},{"code":"HU","name":"Hungary"},{"code":"IS","name":"Iceland"},{"code":"IN","name":"India"},{"code":"ID","name":"Indonesia"},{"code":"IR","name":"Iran"},{"code":"IQ","name":"Iraq"},{"code":"IE","name":"Ireland"},{"code":"IL","name":"Israel"},{"code":"IT","name":"Italy"},{"code":"JM","name":"Jamaica"},{"code":"JP","name":"Japan"},{"code":"JO","name":"Jordan"},{"code":"KZ","name":"Kazakhstan"},{"code":"KE","name":"Kenya"},{"code":"KI","name":"Kiribati"},{"code":"XK","name":"Kosovo"},{"code":"KW","name":"Kuwait"},{"code":"KG","name":"Kyrgyzstan"},{"code":"LA","name":"Lao People's Democratic Republic"},{"code":"LV","name":"Latvia"},{"code":"LB","name":"Lebanon"},{"code":"LS","name":"Lesotho"},{"code":"LR","name":"Liberia"},{"code":"LY","name":"Libyan Arab Jamahiriya"},{"code":"LI","name":"Liechtenstein"},{"code":"LT","name":"Lithuania"},{"code":"LU","name":"Luxembourg"},{"code":"MO","name":"Macau"},{"code":"MK","name":"Macedonia"},{"code":"MG","name":"Madagascar"},{"code":"MW","name":"Malawi"},{"code":"MY","name":"Malaysia"},{"code":"MV","name":"Maldives"},{"code":"ML","name":"Mali"},{"code":"MT","name":"Malta"},{"code":"MH","name":"Marshall Islands"},{"code":"MQ","name":"Martinique"},{"code":"MR","name":"Mauritania"},{"code":"MU","name":"Mauritius"},{"code":"YT","name":"Mayotte"},{"code":"MX","name":"Mexico"},{"code":"FM","name":"Micronesia (Federated States)"},{"code":"MD","name":"Moldova (Republic)"},{"code":"MC","name":"Monaco"},{"code":"MN","name":"Mongolia"},{"code":"ME","name":"Montenegro"},{"code":"MS","name":"Montserrat"},{"code":"MA","name":"Morocco"},{"code":"MZ","name":"Mozambique"},{"code":"MM","name":"Myanmar"},{"code":"NA","name":"Namibia"},{"code":"NR","name":"Nauru"},{"code":"NP","name":"Nepal"},{"code":"NL","name":"Netherlands"},{"code":"AN","name":"Netherlands Antilles"},{"code":"NC","name":"New Caledonia"},{"code":"NZ","name":"New Zealand"},{"code":"NI","name":"Nicaragua"},{"code":"NE","name":"Niger"},{"code":"NG","name":"Nigeria"},{"code":"NU","name":"Niue"},{"code":"NF","name":"Norfolk Island"},{"code":"KP","name":"North Korea (Democratic People's Republic of Korea)"},{"code":"MP","name":"Northern Mariana Islands"},{"code":"NO","name":"Norway"},{"code":"OM","name":"Oman"},{"code":"PK","name":"Pakistan"},{"code":"PW","name":"Palau"},{"code":"PS","name":"Palestinian Territory (Occupied)"},{"code":"PA","name":"Panama"},{"code":"PG","name":"Papua New Guinea"},{"code":"PY","name":"Paraguay"},{"code":"PE","name":"Peru"},{"code":"PH","name":"Philippines"},{"code":"PN","name":"Pitcairn"},{"code":"PL","name":"Poland"},{"code":"PT","name":"Portugal"},{"code":"PR","name":"Puerto Rico"},{"code":"QA","name":"Qatar"},{"code":"RE","name":"Reunion"},{"code":"RO","name":"Romania"},{"code":"RU","name":"Russian Federation"},{"code":"RW","name":"Rwanda"},{"code":"SH","name":"Saint Helena"},{"code":"KN","name":"Saint Kitts and Nevis"},{"code":"LC","name":"Saint Lucia"},{"code":"PM","name":"Saint Pierre and Miquelon"},{"code":"VC","name":"Saint Vincent and The Grenadines"},{"code":"WS","name":"Samoa"},{"code":"SM","name":"San Marino"},{"code":"ST","name":"Sao Tome and Principe"},{"code":"SA","name":"Saudi Arabia"},{"code":"SN","name":"Senegal"},{"code":"RS","name":"Serbia"},{"code":"SC","name":"Seychelles"},{"code":"SL","name":"Sierra Leone"},{"code":"SG","name":"Singapore"},{"code":"SK","name":"Slovakia"},{"code":"SI","name":"Slovenia"},{"code":"SB","name":"Solomon Islands"},{"code":"SO","name":"Somalia"},{"code":"ZA","name":"South Africa"},{"code":"GS","name":"South Georgia and The South Sandwich Islands"},{"code":"KR","name":"South Korea (Republic of Korea)"},{"code":"ES","name":"Spain"},{"code":"LK","name":"Sri Lanka"},{"code":"SD","name":"Sudan"},{"code":"SR","name":"Suriname"},{"code":"SJ","name":"Svalbard and Jan Mayen Islands"},{"code":"SZ","name":"Swaziland"},{"code":"SE","name":"Sweden"},{"code":"CH","name":"Switzerland"},{"code":"SY","name":"Syrian Arab Republic"},{"code":"TW","name":"Taiwan"},{"code":"TJ","name":"Tajikistan"},{"code":"TZ","name":"Tanzania"},{"code":"TH","name":"Thailand"},{"code":"TL","name":"Timor-leste"},{"code":"TG","name":"Togo"},{"code":"TK","name":"Tokelau"},{"code":"TO","name":"Tonga"},{"code":"TT","name":"Trinidad and Tobago"},{"code":"TN","name":"Tunisia"},{"code":"TR","name":"Turkey"},{"code":"TM","name":"Turkmenistan"},{"code":"TC","name":"Turks and Caicos Islands"},{"code":"TV","name":"Tuvalu"},{"code":"UG","name":"Uganda"},{"code":"UA","name":"Ukraine"},{"code":"AE","name":"United Arab Emirates"},{"code":"GB","name":"United Kingdom"},{"code":"US","name":"United States"},{"code":"UM","name":"United States Minor Outlying Islands"},{"code":"UY","name":"Uruguay"},{"code":"UZ","name":"Uzbekistan"},{"code":"VU","name":"Vanuatu"},{"code":"VA","name":"Vatican City State (Holy See)"},{"code":"VE","name":"Venezuela"},{"code":"VN","name":"Viet Nam"},{"code":"VG","name":"Virgin Islands (British)"},{"code":"VI","name":"Virgin Islands (U.S.)"},{"code":"WF","name":"Wallis and Futuna Islands"},{"code":"EH","name":"Western Sahara"},{"code":"YE","name":"Yemen"},{"code":"ZM","name":"Zambia"},{"code":"ZW","name":"Zimbabwe"}];
 
     function getAvailability() {
         document.getElementById('loading-rooms').style.display = 'block';
@@ -737,10 +779,17 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
         var orderSummary = document.createElement('div');
         orderSummary.className = 'orderSummary';
 
+        var allCountriesOptions = '';
+
+        for (var i = 0; i < countries.length; i++) {
+            var c = countries[i];
+            allCountriesOptions+='<option value="'+c.code+'">'+c.name+'</option>';
+        }
+
         orderSummary.insertAdjacentHTML('afterbegin',
                 '<div class="inner">'+
                 '<div class="order">'+
-                '<button>Proceed</button>'+
+                '<button class="mui-btn mui-btn--large mui-btn--primary mui-btn--raised" id="orderRoom">Order room</button>'+
                 '<table>'+
                     '<tr>'+
                     '<td>'+bookingText+'</td><td>'+price+'</td>'+
@@ -772,7 +821,7 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
                 '</div>' +
                 '<div class="mui-select">' +
                 '<select name="country">' +
-                '<option value="no">Norway</option>'+
+                allCountriesOptions+
                 '</select>'+
                 '<label>Country</label>'+
         '</div>' +
@@ -780,11 +829,50 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
             '<input type="email" name="email" id="email">' +
             '<label for="email">Email</label>' +
             '</div>'+
+                '<button class="mui-btn mui-btn--large mui-btn--primary mui-btn--raised" id="pay">Pay for room</button>'+
             '</form>'+
             '</div>');
 
         // use to get country from visa number: https://binlist.net/json/431940
         document.body.appendChild(orderSummary);
+        document.getElementById("orderRoom").onclick=function() {
+            document.body.classList.add("showPay");
+        };
+        document.getElementById("pay").onclick=function() {
+            fetch('https://demo.mews.li/api/distributor/v1/payments/getAdyenClientToken', {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    "Client": "Mjolfjell 1.0.0",
+                    "HotelId": "fa940cf7-b7dd-4ec5-a52c-5425ff69313b"
+                })
+            }).then(function (result) {
+                return result.json();
+            }).then(function (res) {
+                let nowUtc = res.NowUtc;
+                let publicKey = res.PublicKey;
+
+                return fetch('https://demo.mews.li/api/distributor/v1/reservationGroups/create', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: "POST",
+                    body: JSON.stringify({
+                        "Client": "Mjolfjell 1.0.0",
+                        "HotelId": "fa940cf7-b7dd-4ec5-a52c-5425ff69313b"
+                    })
+                }).then(function (result) {
+                    return result.json();
+                }).then(function (res) {
+                    let nowUtc = res.NowUtc;
+                    let publicKey = res.PublicKey;
+                });
+            });
+        };
     }
 
     function showRoomInfo(input, available) {
