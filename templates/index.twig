@@ -371,6 +371,15 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
         .orderSummary .card {
             width: 260px;
             display: inline-block;
+            position: relative;
+        }
+        .orderSummary .card .available {
+            position: absolute;
+            right: 0;
+            top:0;
+        }
+        .orderSummary .card .found {
+            display: none;
         }
         .orderSummary .expiration {
             width: 80px;
@@ -770,6 +779,11 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
         target.appendChild(occupants);
     }
 
+    var visaOutline = '{% filter replace({"\n":""}) %}{% include "img/visa.svg" %}{% endfilter %}';
+    var visa = '{% filter replace({"\n":""}) %}{% include "img/visa_full.svg" %}{% endfilter %}';
+    var mastercardOutline = '{% filter replace({"\n":""}) %}{% include "img/mastercard.svg" %}{% endfilter %}';
+    var mastercard = '{% filter replace({"\n":""}) %}{% include "img/mastercard_full.svg" %}{% endfilter %}';
+
     function createOrder(bookingText, price, currency) {
         var oldSummary = document.querySelector('.orderSummary');
         if (oldSummary) {
@@ -807,12 +821,16 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
             '<label for="fullname">Name on card</label>' +
             '</div>' +
                 '<div class="mui-textfield mui-textfield--float-label card">' +
-                '<input type="text" name="cardnumber" id="cardnumber">' +
+                '<input type="tel" name="cardnumber" id="cardnumber">' +
                 '<label for="cardnumber">Card number</label>' +
+                    '<div class="cards">' +
+                    '<div class="available">'+visaOutline+mastercardOutline+'</div>' +
+                    '<div class="visa found">'+visa+'</div><div class="mastercard found">'+mastercard+'</div>' +
+                    '</div>'+
                 '</div>' +
                 '<div class="mui-textfield mui-textfield--float-label expiration">' +
                 '<input type="text" name="cc-exp" id="frmCCExp" autocomplete="cc-exp">' +
-                '<label for="cc-exp">Expiry</label>' +
+                '<label for="frmCCExp">Expiry</label>' +
                 '</div>' +
                 '<div class="mui-textfield mui-textfield--float-label cvc">' +
                 '<input type="text" name="cvc" id="frmCCCVC" autocomplete="cc-csc">' +
@@ -834,6 +852,19 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
 
         // use to get country from visa number: https://binlist.net/json/431940
         document.body.appendChild(orderSummary);
+
+
+        var cleaveCardnumber = new Cleave(document.getElementById('cardnumber'), {
+            creditCard: true,
+            onCreditCardTypeChanged: function (type) {
+                // update UI ...
+            }
+        });
+
+        var cleaveExpiry = new Cleave(document.getElementById('frmCCExp'), {
+            date: true,
+            datePattern: ['m', 'Y']
+        });
         document.getElementById("orderRoom").onclick=function() {
             document.body.classList.add("showPay");
         };
@@ -851,13 +882,60 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
             }).then(function (result) {
                 return result.json();
             }).then(function (res) {
-                let nowUtc = res.NowUtc;
-                let publicKey = res.PublicKey;
+                var nowUtc = res.NowUtc;
+                var key = res.PublicKey;
+                var options = {}; // See adyen.encrypt.nodom.html for details
+
+                var cseInstance = adyen.encrypt.createEncryption(key, options);
+
+                let holderName = document.getElementById('fullname').value;
+                var cardData = {
+                        number : document.getElementById('cardnumber').value.replace(new RegExp(' ', 'g'), ''),
+                        cvc : document.getElementById('cvc').value,
+                        holderName : holderName,
+                        expiryMonth : document.getElementById('frmCCExp').value.substr(0,2),
+                        expiryYear : document.getElementById('frmCCExp').value.substr(3,7),
+                        generationtime : nowUtc
+                    };
+
+                    //postData['adyen-encrypted-data'] =
+                        ;
 
                 return fetch('https://demo.mews.li/api/distributor/v1/reservationGroups/create', {
                     headers: {
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        "Customer": {
+                            "Email": "hiro@snow.com",
+                            "FirstName": "Hiro",
+                            "LastName": holderName.splt,
+                            "Telephone": "",
+                            "AddressLine1": "",
+                            "AddressLine2": "",
+                            "City": "",
+                            "PostalCode": "",
+                            "StateCode": "",
+                            "NationalityCode": ""
+                        },
+                        "Reservations": [
+                            {
+                                "RoomCategoryId": "4037c0ec-a59d-43f1-9d97-d6c984764e8c",
+                                "StartUtc": "2015-01-01T00:00:00Z",
+                                "EndUtc": "2015-01-03T00:00:00Z",
+                                "VoucherCode": "Discount2042",
+                                "RateId": "c1d48c54-9382-4ceb-a820-772bf370573d",
+                                "AdultCount": 3,
+                                "ChildCount": 0,
+                                "ProductIds": [
+                                    "d0e88da5-ae64-411c-b773-60ed68954f64"
+                                ],
+                                "Notes": undefined
+                            }
+                        ],
+                        "CreditCardData": {
+                            "PaymentGatewayData": cseInstance.encrypt(cardData),
+                            "ObfuscatedCreditCardNumber": "411111******1111"
+                        }
                     },
                     method: "POST",
                     body: JSON.stringify({
@@ -867,11 +945,12 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
                 }).then(function (result) {
                     return result.json();
                 }).then(function (res) {
-                    let nowUtc = res.NowUtc;
-                    let publicKey = res.PublicKey;
+
+
+                        // AJAX call or different handling of the post data
                 });
             });
-        };
+        }
     }
 
     function showRoomInfo(input, available) {

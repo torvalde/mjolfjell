@@ -19,6 +19,7 @@
     "normalize.css": "^5.0.0",
     "payment-icons": "0.0.12",
     "pikaday": "^1.5.1",
-    "twig": "^0.10.3"
+    "twig": "^0.10.3",
+    "adyen-cse-web": "git+https://github.com/Adyen/adyen-cse-web.git#v0.1.19"
   }
 }
