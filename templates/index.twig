@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
     <link href="//cdn.muicss.com/mui-0.9.7/css/mui.min.css" rel="stylesheet" type="text/css" />
     <script src="//cdn.muicss.com/mui-0.9.7/js/mui.min.js"></script>
+    <script src="lib/adyen.encrypt.nodom.js"></script>
     <style>
         *, *:before, *:after {
             box-sizing: border-box;
@@ -373,13 +374,22 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
             display: inline-block;
             position: relative;
         }
-        .orderSummary .card .available {
+        .orderSummary .card .available,.orderSummary .card .found.visa, .orderSummary .card .found.mastercard {
             position: absolute;
             right: 0;
-            top:0;
+            top: 15px;
         }
-        .orderSummary .card .found {
+        .orderSummary .card svg {
+            margin-left: 7px;
+        }
+        .orderSummary .cards.cardfound .available {
             display: none;
+        }
+        .orderSummary .cards .found {
+            display: none;
+        }
+        .orderSummary .cards.visa .found.visa, .orderSummary .cards.mastercard .found.mastercard {
+            display: block;
         }
         .orderSummary .expiration {
             width: 80px;
@@ -624,9 +634,8 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
             },
             method: "POST",
             body: JSON.stringify({
-                "Client": "Mjolfjell 1.0.0",
-                //"HotelId": "2b5a4f41-b367-4235-a08f-f5fb3595948a"
-                "HotelId": "fa940cf7-b7dd-4ec5-a52c-5425ff69313b",
+                "Client": "{{client}}",
+                "HotelId": "{{hotelId}}",
                 "StartUtc": moment(startDate).toISOString(),
                 "EndUtc": moment(endDate).toISOString()
             })
@@ -646,15 +655,14 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
                     if (j==0) {
                         room.price=roa.Pricing[0].Price.AveragePerNight["EUR"];
                     }
-                    room.availabilityTypes.push({adult:roa.AdultCount,child:roa.ChildCount,price:{total:roa.Pricing[0].Price.Total["EUR"], averageNight: roa.Pricing[0].Price.AveragePerNight["EUR"]}});
+                    room.availabilityTypes.push({adult:roa.AdultCount,child:roa.ChildCount,price:{total:roa.Pricing[0].Price.Total["EUR"], averageNight: roa.Pricing[0].Price.AveragePerNight["EUR"], rateId:roa.Pricing[0].RateId}});
                 }
                 //room.averagePrice = rca.Pricing[0].Price.AveragePerNight;
                 //room.totalPrice = rca.Pricing[0].Price.Total;
                 result.push(room);
             }
 
-
-            document.querySelector('body .rooms').innerHTML = '<input type="hidden" name="adultCount" id="adultCount" value="0"><input type="hidden" name="childCount" id="childCount" value="0">';
+            document.querySelector('body .rooms').innerHTML = '<input type="hidden" name="adultCount" id="adultCount" value="0"><input type="hidden" name="childCount" id="childCount" value="0"><input type="hidden" name="rateId" id="rateId">';
             for (var i = 0; i < result.length; i++) {
                 var room = result[i];
                 var caption = "";
@@ -677,7 +685,7 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
                     document.getElementById('adultCount').value=room.availabilityTypes[0].adult;
                     document.getElementById('childCount').value=room.availabilityTypes[0].child;
                 }
-                document.querySelector('body .rooms').insertAdjacentHTML('beforeend', '<figure class="room"><input data-availability-types=\'' + JSON.stringify(room.availabilityTypes) + '\' onClick="showRoomInfo(this,' + room.available + ')" type="radio" name="roomType" value="' + room.type + '" id="roomType' + room.type + '"><label for="roomType' + room.type + '"><h3>' + room.name + '</h3><img src="' + room.images[0] + '"/></label><figcaption>' + caption + '</figcaption><div class="price">€'+room.price+'</div></figure>');
+                document.querySelector('body .rooms').insertAdjacentHTML('beforeend', '<figure class="room"><input data-id="'+room.id+'" data-availability-types=\'' + JSON.stringify(room.availabilityTypes) + '\' onClick="showRoomInfo(this,' + room.available + ')" type="radio" name="roomType" value="' + room.type + '" id="roomType' + room.type + '"><label for="roomType' + room.type + '"><h3>' + room.name + '</h3><img src="' + room.images[0] + '"/></label><figcaption>' + caption + '</figcaption><div class="price">€'+room.price+'</div></figure>');
             }
             document.querySelector('body .rooms').insertAdjacentHTML('beforeend', '<figure class="room"><a href="mailto:mjolfjell.ungdomsherberge@gmail.com?subject=Group booking"><label><h3>Group Reservation</h3><img src="http://placehold.it/400x267"></label></a></figure>');
             document.getElementById('loading-rooms').style.display = 'none';
@@ -784,7 +792,7 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
     var mastercardOutline = '{% filter replace({"\n":""}) %}{% include "img/mastercard.svg" %}{% endfilter %}';
     var mastercard = '{% filter replace({"\n":""}) %}{% include "img/mastercard_full.svg" %}{% endfilter %}';
 
-    function createOrder(bookingText, price, currency) {
+    function createOrder(bookingText, roomId, rateId, price, adultCount, childCount) {
         var oldSummary = document.querySelector('.orderSummary');
         if (oldSummary) {
             oldSummary.parentNode.removeChild(oldSummary);
@@ -796,7 +804,7 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
 
         for (var i = 0; i < countries.length; i++) {
             var c = countries[i];
-            allCountriesOptions+='<option value="'+c.code+'">'+c.name+'</option>';
+            allCountriesOptions += '<option value="' + c.code + '"' + ((c.code.toLowerCase() == '{{ country }}') ? ' selected' : '') + '>' + c.name + '</option>';
         }
 
         orderSummary.insertAdjacentHTML('afterbegin',
@@ -817,11 +825,11 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
                 '</div>'+
                 '<form action="">' +
             '<div class="mui-textfield mui-textfield--float-label">' +
-            '<input type="text" name="fullname" id="fullname">' +
-            '<label for="fullname">Name on card</label>' +
+            '<input type="text" name="ccname" id="frmNameCC" autocomplete="cc-name" required >' +
+            '<label for="frmNameCC">Name on card</label>' +
             '</div>' +
                 '<div class="mui-textfield mui-textfield--float-label card">' +
-                '<input type="tel" name="cardnumber" id="cardnumber">' +
+                '<input type="tel" name="cardnumber" id="cardnumber" required>' +
                 '<label for="cardnumber">Card number</label>' +
                     '<div class="cards">' +
                     '<div class="available">'+visaOutline+mastercardOutline+'</div>' +
@@ -829,15 +837,15 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
                     '</div>'+
                 '</div>' +
                 '<div class="mui-textfield mui-textfield--float-label expiration">' +
-                '<input type="text" name="cc-exp" id="frmCCExp" autocomplete="cc-exp">' +
+                '<input type="text" name="cc-exp" id="frmCCExp" autocomplete="cc-exp" required >' +
                 '<label for="frmCCExp">Expiry</label>' +
                 '</div>' +
                 '<div class="mui-textfield mui-textfield--float-label cvc">' +
-                '<input type="text" name="cvc" id="frmCCCVC" autocomplete="cc-csc">' +
+                '<input type="text" name="cvc" id="frmCCCVC" autocomplete="cc-csc" maxlength="3" pattern="[0-9]+" required>' +
                 '<label for="frmCCCVC">CVC</label>' +
                 '</div>' +
                 '<div class="mui-select">' +
-                '<select name="country">' +
+                '<select name="country" id="countryCode">' +
                 allCountriesOptions+
                 '</select>'+
                 '<label>Country</label>'+
@@ -857,7 +865,17 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
         var cleaveCardnumber = new Cleave(document.getElementById('cardnumber'), {
             creditCard: true,
             onCreditCardTypeChanged: function (type) {
-                // update UI ...
+                let cards = document.querySelector('.orderSummary .cards');
+                if (type && type !== "unknown") {
+                    cards.classList.add('cardfound');
+                    cards.classList.remove('visa');
+                    cards.classList.remove('mastercard');
+                    cards.classList.add(type.toLowerCase());
+                } else {
+                    cards.classList.remove('cardfound');
+                    cards.classList.remove('visa');
+                    cards.classList.remove('mastercard');
+                }
             }
         });
 
@@ -865,10 +883,14 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
             date: true,
             datePattern: ['m', 'Y']
         });
+        var cleaveCvc = new Cleave(document.getElementById('frmCCCVC'), {
+            numeral: true
+        });
         document.getElementById("orderRoom").onclick=function() {
             document.body.classList.add("showPay");
         };
-        document.getElementById("pay").onclick=function() {
+        document.getElementById("pay").onclick=function(event) {
+            event.preventDefault();
             fetch('https://demo.mews.li/api/distributor/v1/payments/getAdyenClientToken', {
                 headers: {
                     'Accept': 'application/json',
@@ -876,8 +898,8 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
                 },
                 method: "POST",
                 body: JSON.stringify({
-                    "Client": "Mjolfjell 1.0.0",
-                    "HotelId": "fa940cf7-b7dd-4ec5-a52c-5425ff69313b"
+                    "Client": "{{client}}",
+                    "HotelId": "{{hotelId}}",
                 })
             }).then(function (result) {
                 return result.json();
@@ -888,46 +910,53 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
 
                 var cseInstance = adyen.encrypt.createEncryption(key, options);
 
-                let holderName = document.getElementById('fullname').value;
+                var holderName = document.getElementById('frmNameCC').value;
+                var countryCode = document.getElementById('countryCode').value;
                 var cardData = {
                         number : document.getElementById('cardnumber').value.replace(new RegExp(' ', 'g'), ''),
-                        cvc : document.getElementById('cvc').value,
+                        cvc : document.getElementById('frmCCCVC').value,
                         holderName : holderName,
                         expiryMonth : document.getElementById('frmCCExp').value.substr(0,2),
                         expiryYear : document.getElementById('frmCCExp').value.substr(3,7),
                         generationtime : nowUtc
                     };
 
-                    //postData['adyen-encrypted-data'] =
-                        ;
+                var email = document.getElementById('email').value;
+
+                var names = holderName.split(' ');
+                var lastName = names.pop();
+                var firstName = names.join(' ');
 
                 return fetch('https://demo.mews.li/api/distributor/v1/reservationGroups/create', {
                     headers: {
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: "POST",
+                    body: JSON.stringify({
+                        "Client": "{{client}}",
+                        "HotelId": "{{hotelId}}",
                         "Customer": {
-                            "Email": "hiro@snow.com",
-                            "FirstName": "Hiro",
-                            "LastName": holderName.splt,
+                            "Email": email,
+                            "FirstName": firstName,
+                            "LastName": lastName,
                             "Telephone": "",
                             "AddressLine1": "",
                             "AddressLine2": "",
                             "City": "",
                             "PostalCode": "",
                             "StateCode": "",
-                            "NationalityCode": ""
+                            "NationalityCode": countryCode
                         },
                         "Reservations": [
                             {
-                                "RoomCategoryId": "4037c0ec-a59d-43f1-9d97-d6c984764e8c",
-                                "StartUtc": "2015-01-01T00:00:00Z",
-                                "EndUtc": "2015-01-03T00:00:00Z",
-                                "VoucherCode": "Discount2042",
-                                "RateId": "c1d48c54-9382-4ceb-a820-772bf370573d",
-                                "AdultCount": 3,
-                                "ChildCount": 0,
+                                "RoomCategoryId": roomId,
+                                "StartUtc": moment(startDate).toISOString(),
+                                "EndUtc": moment(endDate).toISOString(),
+                                "RateId": rateId,
+                                "AdultCount": adultCount,
+                                "ChildCount": childCount,
                                 "ProductIds": [
-                                    "d0e88da5-ae64-411c-b773-60ed68954f64"
                                 ],
                                 "Notes": undefined
                             }
@@ -936,19 +965,27 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
                             "PaymentGatewayData": cseInstance.encrypt(cardData),
                             "ObfuscatedCreditCardNumber": "411111******1111"
                         }
-                    },
-                    method: "POST",
-                    body: JSON.stringify({
-                        "Client": "Mjolfjell 1.0.0",
-                        "HotelId": "fa940cf7-b7dd-4ec5-a52c-5425ff69313b"
                     })
                 }).then(function (result) {
                     return result.json();
                 }).then(function (res) {
+                    document.body.classList.remove('showPay');
+                    var s = document.querySelector('.orderSummary');
+                    s.parentNode.removeChild(s);
+                    var modalEl = document.createElement('div');
+                    modalEl.style.width = '400px';
+                    modalEl.style.height = '300px';
+                    modalEl.style.margin = '100px auto';
+                    modalEl.style.backgroundColor = '#fff';
 
-
+                    modalEl.innerHTML="Thanks for your booking!";
+                    // show modal
+                    mui.overlay('on', modalEl);
+                console.log(res);
                         // AJAX call or different handling of the post data
                 });
+            }).catch(function(err) {
+                console.error(err);
             });
         }
     }
@@ -1000,6 +1037,7 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
             h4.appendChild(document.createTextNode("How many beds do you need?"));
             var adultPrice, childPrice;
             var totalAdultPrice, totalChildPrice;
+            var rateId;
             for (var i = 0; i < availabilityTypes.length; i++) {
                 var at = availabilityTypes[i];
                 var label = document.createElement("label");
@@ -1019,6 +1057,7 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
                     childPrice = at.price.averageNight;
                     totalChildPrice = at.price.total;
                 }
+                rateId = at.price.rateId;
                 toggle.onkeyup = function (event) {
                     event.preventDefault();
                     if (event.keyCode == 13) {
@@ -1026,9 +1065,11 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
                         currentChildCount = Number(body.querySelector('input[name=child]').value);
                         document.getElementById('adultCount').value=currentAdultCount;
                         document.getElementById('childCount').value=currentChildCount;
+                        document.getElementById('rateId').value=rateId;
+
                         document.body.removeChild(popup);
                         showOccupants(input.parentNode,Number(body.querySelector('input[name=adult]').value),Number(body.querySelector('input[name=child]').value));
-                        createOrder(getDescription(), (totalAdultPrice*currentAdultCount)+(totalChildPrice*currentChildCount), 'NOK');
+                        createOrder(getDescription(), input.dataset.id, rateId, (totalAdultPrice*currentAdultCount)+(totalChildPrice*currentChildCount), currentAdultCount, currentChildCount);
                         showPrice(input.parentNode,(adultPrice*currentAdultCount)+(childPrice*currentChildCount));
                     }
                 };
@@ -1043,9 +1084,10 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
                 currentChildCount = Number(body.querySelector('input[name=child]').value);
                 document.getElementById('adultCount').value=currentAdultCount;
                 document.getElementById('childCount').value=currentChildCount;
+                document.getElementById('rateId').value=rateId;
                 document.body.removeChild(popup);
                 showOccupants(input.parentNode,currentAdultCount,currentChildCount);
-                createOrder(getDescription(), (totalAdultPrice*currentAdultCount)+(totalChildPrice*currentChildCount), 'NOK');
+                createOrder(getDescription(), input.dataset.id, rateId, (totalAdultPrice*currentAdultCount)+(totalChildPrice*currentChildCount), currentAdultCount, currentChildCount);
                 showPrice(input.parentNode,(adultPrice*currentAdultCount)+(childPrice*currentChildCount));
             };
             body.appendChild(button);
@@ -1083,23 +1125,28 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
                 var option = document.createElement("input");
                 option.type = "radio";
                 option.name="occupants";
-                option.id=input.value+'_'+at.adult+'_'+at.child;
+                option.id=at.price.rateId;
                 if (at.adult==currentAdultCount&&at.child==currentChildCount) {
                     option.checked = true;
                 }
-                option.value=at.adult+'_'+at.child;
+                option.value=at.adult+'_'+at.child+'_'+at.price.rateId+'_'+at.price.averageNight+'_'+at.price.total;
                 var optionLabel = document.createElement("label");
-                optionLabel.htmlFor=input.value+'_'+at.adult+'_'+at.child;
+                optionLabel.htmlFor=at.price.rateId;
                 optionLabel.innerHTML=adult.repeat(at.adult)+child.repeat(at.child);
                     // (at.adult==0?'':(at.adult==1?'1 adult':at.adult+' adults'))+' '+(at.child==0?'':(at.child==1?'1 child':at.child+' children'));
                 option.onclick=function(event) {
                     currentAdultCount = Number(this.value.split('_')[0]);
                     currentChildCount = Number(this.value.split('_')[1]);
+                    var rateId = this.value.split('_')[2];
+                    var price = Number(this.value.split('_')[3]);
+                    var total = Number(this.value.split('_')[4]);
                     document.getElementById('adultCount').value=currentAdultCount;
                     document.getElementById('childCount').value=currentChildCount;
+                    document.getElementById('rateId').value=rateId;
                     document.body.removeChild(popup);
                     showOccupants(input.parentNode,currentAdultCount,currentChildCount);
-                    createOrder(getDescription(), 100, 'NOK');
+                    createOrder(getDescription(), input.dataset.id, rateId, total, currentAdultCount, currentChildCount);
+                    showPrice(input.parentNode,price);
                 };
                 var person = document.createElement("div");
                 person.className='person';
