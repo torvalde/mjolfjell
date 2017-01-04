@@ -927,6 +927,10 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
                 var lastName = names.pop();
                 var firstName = names.join(' ');
 
+                document.body.classList.remove('showPay');
+                var s = document.querySelector('.orderSummary');
+                s.parentNode.removeChild(s);
+
                 return fetch('https://demo.mews.li/api/distributor/v1/reservationGroups/create', {
                     headers: {
                         'Accept': 'application/json',
@@ -969,12 +973,12 @@ background: url('img/mjolfjell21.jpg') 0 0 no-repeat;
                 }).then(function (result) {
                     return result.json();
                 }).then(function (res) {
-                    document.body.classList.remove('showPay');
-                    var s = document.querySelector('.orderSummary');
-                    s.parentNode.removeChild(s);
                     var modalEl = document.createElement('div');
                     modalEl.style.width = '400px';
-                    modalEl.style.height = '300px';
+                    modalEl.style.height = 'auto';
+                    modalEl.style.padding = '20px';
+                    modalEl.style.fontSize = '18px';
+                    modalEl.style.textAlign = 'center';
                     modalEl.style.margin = '100px auto';
                     modalEl.style.backgroundColor = '#fff';
 
